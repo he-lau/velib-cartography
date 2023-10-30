@@ -31,28 +31,44 @@
 
 <script>
 
-var map = L.map('map').setView([48.866667, 2.333333], 13);
+// instanciation de la carte leaflet + vue de base & zoom
+var map = L.map('map').setView([48.866667, 2.333333], 12);
 
-
+// Charger les données depuis openstreetmap
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
+    maxZoom: 20, // niveau de zoom max pour l'user
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
+/*
+L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox.streets',  // Le style de tuiles que vous souhaitez utiliser (vous pouvez changer le style)
+    accessToken: 'VOTRE_CLÉ_MAPBOX'  // Remplacez ceci par votre propre clé Mapbox
+}).addTo(map);
+*/
 
-var marker = L.marker([51.5, -0.09]).addTo(map);
 
-var circle = L.circle([51.508, -0.11], {
+// ajout d'un marker
+var marker = L.marker([48.866667, 2.333333])
+.addTo(map)
+.bindPopup('bindPopup()')
+.openPopup();
+
+// ajout d'un cercle
+var circle = L.circle([48.85, 2.35], {
     color: 'red',
     fillColor: '#f03',
     fillOpacity: 0.5,
     radius: 500
 }).addTo(map);
 
+// ajout polygone
 var polygon = L.polygon([
-    [51.509, -0.08],
-    [51.503, -0.06],
-    [51.51, -0.047]
+    [48.866667, 2.3],
+    [48.886667, 2.4],
+    [48.876667, 2.5]
 ]).addTo(map);
 
 
