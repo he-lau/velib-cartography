@@ -1,10 +1,11 @@
 CREATE TABLE velib_logs (
-    stationcode INT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    stationcode INT,
     log_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     lon FLOAT,
     lat FLOAT,
     capacity INT,
-    duedate TIMESTAMP,
+    duedate TIMESTAMP NULL,
     ebike TINYINT(1),
     is_installed TINYINT(1),
     is_renting TINYINT(1),

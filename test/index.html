@@ -5,34 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Placement des stations</title>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""/>
-    <!-- Make sure you put this AFTER Leaflet's CSS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js" integrity="sha512-OFs3W4DIZ5ZkrDhBFtsCP6JXtMEDGmhl0QPlmWYBJay40TT1n3gt2Xuw8Pf/iezgW9CdabjkNChRqozl/YADmg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Leaflet.MarkerCluster -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css" rel="stylesheet" />
+    
     <script src="https://cdn.maptiler.com/maptiler-sdk-js/v1.1.1/maptiler-sdk.umd.js"></script>
     <link href="https://cdn.maptiler.com/maptiler-sdk-js/v1.1.1/maptiler-sdk.css" rel="stylesheet" />
     <script src="https://cdn.maptiler.com/leaflet-maptilersdk/v1.0.0/leaflet-maptilersdk.js"></script>
-    <!-- Leaflet.MarkerCluster -->
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js'></script>
-    <link href='https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css' rel='stylesheet' />
-    <link href='https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css' rel='stylesheet' />
-
-    <!-- FA 5-->
+    
+    <!-- Font Awesome 5 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    
 
     <style>
         #map { 
             height: 580px; 
         }
     </style>
+
+    <script src="js/script.js"></script>
 </head>
 <body>
     
@@ -83,12 +78,7 @@
 
     <script>
 
-        let userLocation = {};
 
-        let markers = L.markerClusterGroup();
-
-        let map;
-        let mapInitialized = false;
 
         const BASE_URL = "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/velib-disponibilite-en-temps-reel";
 
@@ -101,19 +91,33 @@
             shadowSize: [41, 41]
         });
 
-        const initMapWithStations = async () => {
+        
+
+        let map;
+
+        let mapInitialized = false;
+        
+        let markers = L.markerClusterGroup();
+
+        const initStationsOnTheMap = async () => {
+
+            let userLocation = {};
+
 
             try {
 
                 // Appel de la fonction getUserCoordonnees de manière asynchrone
                 await getUserCoordonnees()
                     .then(location => {
-                        console.log('test', location.lon);
-                        // init leaflet map
-                        map = initMap('map',location.lat,location.lon);   
-                        mapInitialized = true;
 
-                        console.log('BBBBBBBBBBBBBBB')
+                        //console.log('test', location.lon);
+
+                        if(! mapInitialized) {
+                            // init leaflet map
+                            map = initMap('map',location.lat,location.lon);   
+                            mapInitialized = true;
+                        }
+
                         
                         // ajout du marqueur à la liste des marqueurs
                         /*
@@ -133,11 +137,12 @@
                             }
                         );
 
-                        // Utilisez du CSS pour définir la couleur du marqueur en rouge
                         //userPositionMarker._icon.style.color = 'red';
 
                         userPositionMarker.bindPopup("User location");
                         markers.addLayer(userPositionMarker);
+
+
                     }) // reject
                     .catch(error => {
                         console.error(error);
@@ -145,7 +150,7 @@
                     
                     
                 if(! mapInitialized) {
-                    console.log('mapInitialized',mapInitialized);
+                    //console.log('mapInitialized',mapInitialized);
                     // init leaflet map
                     map = initMap('map',48.833314,.3520025);    
                 }
@@ -161,6 +166,11 @@
                 
                 
                 data.forEach(element => {
+
+                    // Logs
+                    insertVelibLogs("php/insertVelibLogs.php",element); 
+
+
                     let stationcode = element["stationcode"];
                     let coordonnees_geo = element["coordonnees_geo"];
                     let lon = coordonnees_geo['lon'];
@@ -189,9 +199,8 @@
                     .bindPopup('bindPopup()')
                     .openPopup();
                     */
-                    // Créez un popup avec des informations de station.
-                    // Créez un popup avec des informations de station.
-                    
+
+                    // Créez un popup avec des informations de station.                
                     let popupContent = `
                         <strong>Station Information</strong><br>
                         <ul>
@@ -205,7 +214,12 @@
 
                         </ul>
                     `;
-                    let marker = L.marker([lat, lon]);
+                    let marker = L.marker(
+                        [lat, lon], 
+                        {
+                            id : stationcode
+                        }                        
+                        );
                     marker.bindPopup(popupContent);
 
                     markers.addLayer(marker); // Ajoutez le marqueur au groupe de clusters.               
@@ -228,13 +242,68 @@
 
 
 
+                // TODO : 
+        /* 1 - appel à l'API 
+         * 2 - recuperer 
+         * 
+         * 
+         */
+         const refreshMap = async () => {
+            const response = await fetch(BASE_URL+"/exports/json");
+            const text = await response.text();
 
-        // initMapWithStations
-        initMapWithStations()
-        .then(() => {
-                console.log('FIN initMapWithStations');
+            let data = await JSON.parse(text);
+
+            console.log(data);
+
+            console.log("markers clusters",markers);
+
+            let listeMarqueurs = markers.getLayers();
+
+            console.log("markers list",listeMarqueurs);
+
+            listeMarqueurs.forEach(function(marker) {
+                    //console.log(marker.getLatLng()); // Obtenez la position du marqueur
+                    // Ouvrez le popup de chaque marqueur regroupé
+                    //marker.openPopup();
+                    //var nouvellePosition = L.latLng(50, 5);
+                    //marker.setLatLng(nouvellePosition);
+            });
+        }
+
+
+
+        let initMain = false;
+
+
+        function main() {
+            //markers.clearLayers();
+
+            if(! initMain) {
+                initStationsOnTheMap()
+                .then(() => {
+                    console.log('FIN initStationsOnTheMap');
+                });
+
+                initMain = true;
+            } else {
+                console.log('Refresh map...');
+                refreshMap();
             }
-        ); 
+
+
+
+        }
+
+        const intervalInMilliseconds = 60 * 100;
+
+        main(); 
+
+        setInterval(main, intervalInMilliseconds);
+
+
+
+
 
 
         // Listeners         
