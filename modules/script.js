@@ -63,7 +63,7 @@ export async function getUserCoordonnees() {
             reject("Geolocation non disponible");
         }
     });
-}
+} 
 
 export function renderPopUpContent(name,duedate,capacity,numdocksavailable,numbikesavailable,ebike,mechanical) {
     let popupContent = `

@@ -12,8 +12,7 @@ const redIcon = new L.Icon({
     shadowSize: [41, 41]
 });
 
-
-
+ 
 let map;
 
 let mapInitialized = false;
@@ -159,7 +158,7 @@ markers.addLayer(marker); // Ajoutez le marqueur au groupe de clusters.
 
 
 }
-
+ 
 
 
 
@@ -216,6 +215,8 @@ markers.addLayer(marker); // Ajoutez le marqueur au groupe de clusters.
     //console.log("first marker : ",listeMarqueurs[0]);
     //console.log("first marker option : ",listeMarqueurs[0]['options']);
 
+    let updatedCount = 0;
+
         
         data.forEach(element => {
 
@@ -262,60 +263,171 @@ markers.addLayer(marker); // Ajoutez le marqueur au groupe de clusters.
             //console.log("station courante",stationcode);
             //console.log("indice du courant",indexOfMarkerOfcurrentElement);
 
+            const newOptions = {
+                stationcode : stationcode,
+                name: name,
+                duedate: duedate,
+                capacity: capacity,
+                numdocksavailable: numdocksavailable,
+                numbikesavailable: numbikesavailable,
+                ebike: ebike,
+                mechanical: mechanical
+                };  
 
 
+
+
+            let avant =  Object.assign({}, markerOfcurrentElement['options']);
+            
             // comparer les metadatas (options) & ssi different : maj vue    
             if(capacity !==  markerOfcurrentElement['options']['capacity']) {
                 
                 console.log("capacity changed !"+" - " + name);
-                console.log("avant : ", markerOfcurrentElement['options'], "après : ", element);
-
+                console.log("avant : ", avant, "après : ", element);
 
                 // changer la popup
                 listeMarqueurs[indexOfMarker].setPopupContent(renderPopUpContent(name,duedate,capacity,numdocksavailable,numbikesavailable,ebike,mechanical));
+                // IMPORTANT : MAJ des 'options' de l'ancien marqueur
+                //listeMarqueurs[indexOfMarker].options.name = name;
+                listeMarqueurs[indexOfMarker].options.duedate = duedate;
+                //listeMarqueurs[indexOfMarker].options.capacity = capacity;
+                listeMarqueurs[indexOfMarker].options.numbikesavailable = numbikesavailable;
+                listeMarqueurs[indexOfMarker].options.numdocksavailable = numdocksavailable;
+                listeMarqueurs[indexOfMarker].options.ebike = ebike;
+                listeMarqueurs[indexOfMarker].options.mechanical = mechanical;
+
+
+                insertVelibLogs("php/insertVelibLogs.php",element); 
+                updatedCount++;
             } else if (duedate !==  markerOfcurrentElement['options']['duedate']) {    
+                console.log("duedate changed !"+" - " + name);       
+                console.log("avant : ", avant, "après : ", element);
+    
+                // changer la popup
+                listeMarqueurs[indexOfMarker].setPopupContent(renderPopUpContent(name,duedate,capacity,numdocksavailable,numbikesavailable,ebike,mechanical));
+                // IMPORTANT : MAJ des 'options' de l'ancien marqueur
+                //listeMarqueurs[indexOfMarker].options.name = name;
+                listeMarqueurs[indexOfMarker].options.duedate = duedate;
+                //listeMarqueurs[indexOfMarker].options.capacity = capacity;
+                listeMarqueurs[indexOfMarker].options.numbikesavailable = numbikesavailable;
+                listeMarqueurs[indexOfMarker].options.numdocksavailable = numdocksavailable;
+                listeMarqueurs[indexOfMarker].options.ebike = ebike;
+                listeMarqueurs[indexOfMarker].options.mechanical = mechanical;
+                insertVelibLogs("php/insertVelibLogs.php",element); 
+                updatedCount++;
+            } else if (ebike !==  markerOfcurrentElement['options']['ebike']) { 
+                console.log("ebike changed !"+" - " + name);  
+
+                console.log("avant : ", avant, "après : ", element);
+              
+                // changer la popup
+                listeMarqueurs[indexOfMarker].setPopupContent(renderPopUpContent(name,duedate,capacity,numdocksavailable,numbikesavailable,ebike,mechanical));
+                
+                // IMPORTANT : MAJ des 'options' de l'ancien marqueur
+                //listeMarqueurs[indexOfMarker].options.name = name;
+                listeMarqueurs[indexOfMarker].options.duedate = duedate;
+                //listeMarqueurs[indexOfMarker].options.capacity = capacity;
+                listeMarqueurs[indexOfMarker].options.numbikesavailable = numbikesavailable;
+                listeMarqueurs[indexOfMarker].options.numdocksavailable = numdocksavailable;
+                listeMarqueurs[indexOfMarker].options.ebike = ebike;
+                listeMarqueurs[indexOfMarker].options.mechanical = mechanical;    
+                           
+                insertVelibLogs("php/insertVelibLogs.php",element); 
+                updatedCount++;
+            } else if (mechanical !==  markerOfcurrentElement['options']['mechanical']) { 
+                console.log("mechanical changed !"+" - " + name);  
+                console.log("avant : ", avant, "après : ", element);
+
+                // changer la popup
+                listeMarqueurs[indexOfMarker].setPopupContent(renderPopUpContent(name,duedate,capacity,numdocksavailable,numbikesavailable,ebike,mechanical));
+                // IMPORTANT : MAJ des 'options' de l'ancien marqueur
+                //listeMarqueurs[indexOfMarker].options.name = name;
+                listeMarqueurs[indexOfMarker].options.duedate = duedate;
+                //listeMarqueurs[indexOfMarker].options.capacity = capacity;
+                listeMarqueurs[indexOfMarker].options.numbikesavailable = numbikesavailable;
+                listeMarqueurs[indexOfMarker].options.numdocksavailable = numdocksavailable;
+                listeMarqueurs[indexOfMarker].options.ebike = ebike;
+                listeMarqueurs[indexOfMarker].options.mechanical = mechanical;          
+                insertVelibLogs("php/insertVelibLogs.php",element); 
+                updatedCount++;
+            } else if (name !==  markerOfcurrentElement['options']['name']) {
+                console.log("name changed !"+" - " + name);   
+                console.log("avant : ", avant, "après : ", element);
+              
+                // changer la popup
+                listeMarqueurs[indexOfMarker].setPopupContent(renderPopUpContent(name,duedate,capacity,numdocksavailable,numbikesavailable,ebike,mechanical));
+                // IMPORTANT : MAJ des 'options' de l'ancien marqueur
+                //listeMarqueurs[indexOfMarker].options.name = name;
+                listeMarqueurs[indexOfMarker].options.duedate = duedate;
+                //listeMarqueurs[indexOfMarker].options.capacity = capacity;
+                listeMarqueurs[indexOfMarker].options.numbikesavailable = numbikesavailable;
+                listeMarqueurs[indexOfMarker].options.numdocksavailable = numdocksavailable;
+                listeMarqueurs[indexOfMarker].options.ebike = ebike;
+                listeMarqueurs[indexOfMarker].options.mechanical = mechanical;             
+                insertVelibLogs("php/insertVelibLogs.php",element); 
+                updatedCount++;
+            } else if (numbikesavailable !==  markerOfcurrentElement['options']['numbikesavailable']) {                
+                console.log("numbikesavailable changed !"+" - " + name);  
+                console.log("avant : ", avant, "après : ", element);
+
+                // changer la popup
+                listeMarqueurs[indexOfMarker].setPopupContent(renderPopUpContent(name,duedate,capacity,numdocksavailable,numbikesavailable,ebike,mechanical));
+                // IMPORTANT : MAJ des 'options' de l'ancien marqueur
+                //listeMarqueurs[indexOfMarker].options.name = name;
+                listeMarqueurs[indexOfMarker].options.duedate = duedate;
+                //listeMarqueurs[indexOfMarker].options.capacity = capacity;
+                listeMarqueurs[indexOfMarker].options.numbikesavailable = numbikesavailable;
+                listeMarqueurs[indexOfMarker].options.numdocksavailable = numdocksavailable;
+                listeMarqueurs[indexOfMarker].options.ebike = ebike;
+                listeMarqueurs[indexOfMarker].options.mechanical = mechanical;             
+                insertVelibLogs("php/insertVelibLogs.php",element); 
+                updatedCount++;
+            } else if (numdocksavailable !==  markerOfcurrentElement['options']['numdocksavailable']) { 
+                console.log("numdocksavailable changed !"+" - " + name);   
+                console.log("avant : ", avant, "après : ", element);
+            
+                // changer la popup
+                listeMarqueurs[indexOfMarker].setPopupContent(renderPopUpContent(name,duedate,capacity,numdocksavailable,numbikesavailable,ebike,mechanical));
+                // IMPORTANT : MAJ des 'options' de l'ancien marqueur
+                //listeMarqueurs[indexOfMarker].options.name = name;
+                listeMarqueurs[indexOfMarker].options.duedate = duedate;
+                //listeMarqueurs[indexOfMarker].options.capacity = capacity;
+                listeMarqueurs[indexOfMarker].options.numbikesavailable = numbikesavailable;
+                listeMarqueurs[indexOfMarker].options.numdocksavailable = numdocksavailable;
+                listeMarqueurs[indexOfMarker].options.ebike = ebike;
+                listeMarqueurs[indexOfMarker].options.mechanical = mechanical;            
+                insertVelibLogs("php/insertVelibLogs.php",element); 
+                updatedCount++;
+            
+            } 
+            
+            
+            
+            
+            
+            
+            
+            /*
+            
+            if (duedate !==  markerOfcurrentElement['options']['duedate']) {    
                 console.log("duedate changed !"+" - " + name);       
                 console.log("avant : ", markerOfcurrentElement['options'], "après : ", element);
     
                 // changer la popup
                 listeMarqueurs[indexOfMarker].setPopupContent(renderPopUpContent(name,duedate,capacity,numdocksavailable,numbikesavailable,ebike,mechanical));
+                // IMPORTANT : MAJ des 'options' de l'ancien marqueur
+                //listeMarqueurs[indexOfMarker].options.name = name;
+                listeMarqueurs[indexOfMarker].options.duedate = duedate;
+                //listeMarqueurs[indexOfMarker].options.capacity = capacity;
+                listeMarqueurs[indexOfMarker].options.numbikesavailable = numbikesavailable;
+                listeMarqueurs[indexOfMarker].options.numdocksavailable = numdocksavailable;
+                listeMarqueurs[indexOfMarker].options.ebike = ebike;
+                listeMarqueurs[indexOfMarker].options.mechanical = mechanical;
+                
                 insertVelibLogs("php/insertVelibLogs.php",element); 
-            } else if (ebike !==  markerOfcurrentElement['options']['ebike']) { 
-                console.log("ebike changed !"+" - " + name);  
-                console.log("avant : ", markerOfcurrentElement['options'], "après : ", element);
-              
-                // changer la popup
-                listeMarqueurs[indexOfMarker].setPopupContent(renderPopUpContent(name,duedate,capacity,numdocksavailable,numbikesavailable,ebike,mechanical));
-                insertVelibLogs("php/insertVelibLogs.php",element); 
-            } else if (mechanical !==  markerOfcurrentElement['options']['mechanical']) { 
-                console.log("mechanical changed !"+" - " + name);  
-                console.log("avant : ", markerOfcurrentElement['options'], "après : ", element);
 
-                // changer la popup
-                listeMarqueurs[indexOfMarker].setPopupContent(renderPopUpContent(name,duedate,capacity,numdocksavailable,numbikesavailable,ebike,mechanical));
-                insertVelibLogs("php/insertVelibLogs.php",element); 
-            } else if (name !==  markerOfcurrentElement['options']['name']) {
-                console.log("name changed !"+" - " + name);   
-                console.log("avant : ", markerOfcurrentElement['options'], "après : ", element);
-              
-                // changer la popup
-                listeMarqueurs[indexOfMarker].setPopupContent(renderPopUpContent(name,duedate,capacity,numdocksavailable,numbikesavailable,ebike,mechanical));
-                insertVelibLogs("php/insertVelibLogs.php",element); 
-            } else if (numbikesavailable !==  markerOfcurrentElement['options']['numbikesavailable']) {                
-                console.log("numbikesavailable changed !"+" - " + name);  
-                console.log("avant : ", markerOfcurrentElement['options'], "après : ", element);
-
-                // changer la popup
-                listeMarqueurs[indexOfMarker].setPopupContent(renderPopUpContent(name,duedate,capacity,numdocksavailable,numbikesavailable,ebike,mechanical));
-                insertVelibLogs("php/insertVelibLogs.php",element); 
-            } else if (numdocksavailable !==  markerOfcurrentElement['options']['numdocksavailable']) { 
-                console.log("numdocksavailable changed !"+" - " + name);   
-                console.log("avant : ", markerOfcurrentElement['options'], "après : ", element);
-            
-                // changer la popup
-                listeMarqueurs[indexOfMarker].setPopupContent(renderPopUpContent(name,duedate,capacity,numdocksavailable,numbikesavailable,ebike,mechanical));
-                insertVelibLogs("php/insertVelibLogs.php",element); 
-            } else {
+                updatedCount++;
+            } */else {
                 console.log('Station à jour, pas de changement.');
             }
  
@@ -324,8 +436,7 @@ markers.addLayer(marker); // Ajoutez le marqueur au groupe de clusters.
 
 
 
-
-
+ 
 
 
             /**
@@ -344,12 +455,10 @@ markers.addLayer(marker); // Ajoutez le marqueur au groupe de clusters.
 
             }
 
-
-
-            
-
     
-        });
+        }); 
+
+        return {updatedCount:updatedCount};
         
                        
 
@@ -372,6 +481,9 @@ function main() {
         initStationsOnTheMap()
         .then(() => {
             console.log('FIN initStationsOnTheMap');
+            let listeMarqueurs = markers.getLayers();
+
+            console.log(listeMarqueurs)
                     /**
          * TEST
          */
@@ -405,7 +517,43 @@ function main() {
 
     } else {
         console.log('Refresh map...');
-        refreshMap();
+        refreshMap()
+        .then((o)=> {
+
+            //alert(o.updatedCount + " station(s) mis à jour.");
+            var alertElement = document.getElementById('alert');
+
+            if(o.updatedCount >0) {
+
+                // afficher l'alert
+                alertElement.classList.add('alert-success');
+                alertElement.classList.remove('alert-info');
+                alertElement.classList.remove('d-none');
+                
+            
+                // changer le text
+                //alertElement.innerText = o.updatedCount + " station(s) mis à jour"; // Change the inner text
+                alertElement.innerHTML = '<span style="font-size: larger; font-weight: bold;">' + o.updatedCount + ' station(s) mis à jour</span>';
+                
+            } else{
+    
+                // afficher l'alert
+                alertElement.classList.remove('alert-success');
+                alertElement.classList.add('alert-info');
+                alertElement.classList.remove('d-none');
+                            
+                // changer le text
+                //alertElement.innerText = "Carte à jour."; // Change the inner text
+                alertElement.innerHTML = '<span style="font-size: larger; font-weight: bold;">' + "Carte à jour"+'</span>';
+                //alert("Carte à jour.")
+            }
+
+            // retirer
+            setTimeout(function() {
+                alertElement.classList.add('d-none');
+            }, 4000);
+            
+        });
     }
 
 
@@ -420,7 +568,7 @@ setInterval(main, intervalInMilliseconds);
 
 
 
-
+ 
 
 
 // Listeners         
@@ -429,4 +577,4 @@ markers.on('clusterclick', function (a) {
 });
 markers.on('click', function (a) {
     console.log('Marker Clicked',a); 
-});        
+});          
