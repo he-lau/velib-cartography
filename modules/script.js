@@ -37,6 +37,16 @@ export function initMap(elementId,lat,lon) {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 
+/*
+        //ajouter des fonds de carte
+        var baselayers = {
+            OSM: L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png'),
+            ESRI: L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'),
+            openTopo: L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png'),
+            Forest: L.tileLayer('https://dev.{s}.tile.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png'),
+            velo: L.tileLayer('http://tile.thunderforest.com/cycle/${z}/${x}/${y}.png')
+        };baselayers.OSM.addTo(map);
+*/
     return map;
 }
 
@@ -80,4 +90,41 @@ export function renderPopUpContent(name,duedate,capacity,numdocksavailable,numbi
                 </ul>
               `;
     return popupContent;            
+}
+
+
+export function routingDefault(map, waypoints) {
+
+    try {
+        let routing = L.Routing.control({
+            waypoints: waypoints,
+            lineOptions: {
+                styles: [{color: '#7f00ff', opacity: 1, weight: 7}]
+            },
+            position: 'bottomleft',
+            routeWhileDragging: true, // Ajoutez d'autres options de configuration si nécessaire
+            //router: L.Routing.mapbox('your-api-key-here'), // Utilisez votre propre clé API Mapbox
+            //method: method, // Utilisez le paramètre "method" spécifié
+
+            // Nous personnalisons la langue et le moyen de transport
+            router: new L.Routing.osrmv1({
+                serviceUrl: 'https://router.project-osrm.org/route/v1',
+                //serviceUrl: 'http://router.project-osrm.org/route/v1/walking/',
+                language: 'fr',
+                // IMPORTANT : profile non pris en compte en mode demo !!!!!!!!!!
+                profile: 'foot', // car, bike, foot
+            }),
+
+            geocoder: L.Control.Geocoder.nominatim()
+
+        }).addTo(map);
+
+
+
+    return routing;
+
+    } catch(e) {
+        console.error(e);
+    }
+
 }
