@@ -38,14 +38,65 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-    <!-- Include OSRM plugin -->
-    
+    <!-- Routing -->
+    <script src="../assets/libraries/graphhopper/lrm-graphhopper-1.2.0.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    <!-- Leaflet Sidebar -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-sidebar-v2/css/leaflet-sidebar.min.css" />
+    <script src="https://unpkg.com/leaflet-sidebar-v2/js/leaflet-sidebar.min.js"></script>
+
+    <!-- Locate control -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
 
 </head>
 <body>
     
+    <div id="sidebar" class="leaflet-sidebar collapsed">
+        <!-- Nav tabs -->
+        <div class="leaflet-sidebar-tabs">
+            <ul role="tablist"> <!-- top aligned tabs -->
+                <li><a href="#home" role="tab"><i class="fa fa-info"></i></a></li>
+                <li class="disabled"><a href="#profile" role="tab"><i class="fa fa-user"></i></a></li>
+            </ul>
+    
+            <ul role="tablist"> <!-- bottom aligned tabs -->
+                <li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
+            </ul>
 
+
+
+          
+        </div>
+        
+    
+        <!-- Tab panes -->
+        <div class="leaflet-sidebar-content">
+            <div class="leaflet-sidebar-pane" id="home">
+                <h1 class="leaflet-sidebar-header">
+                    Velib-cartography
+                    <div class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></div>
+                </h1>
+                <br>
+                <b>Projet universitaire :</b>
+                <ul>
+                    <li>Utilisation d'une API en temps réel</li>
+                    <li>Mise à jour des données en temps réel</li>
+                    <li>Utilisation d'une base de donnée (MYSQL)</li>
+                    <li>Calcul d'itinéraire</li>
+                </ul>
+            </div>
+    
+            <div class="leaflet-sidebar-pane" id="profile">
+                <h1 class="leaflet-sidebar-header">Profile<div class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></div></h1>
+            </div>
+   
+        </div>
+    </div>
+    
     <div id="map"></div>
 
     <script type="module" src="./js/main.js"></script>

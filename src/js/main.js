@@ -3,7 +3,11 @@ import {
   getUserCoordonnees,
   renderPopUpContent,
   insertVelibLogs,
-  routingDefault
+  createRouting,
+  initRouting,
+  updateRouting,
+  initSideBar,
+  findNearestStation
 } from "../../modules/script.js";
 
 const BASE_URL =
@@ -25,6 +29,8 @@ let map;
 let mapInitialized = false;
 let getUserLocation = false;
 let leafletIdOfUserLocationMarker = -1;
+
+let userPositionMarker;
 
 let markers = L.markerClusterGroup();
 
@@ -60,7 +66,7 @@ const initStationsOnTheMap = async () => {
                 });
                 */
         // Créez un marqueur par défaut de Leaflet
-        let userPositionMarker = L.marker([location.lat, location.lon], {
+        userPositionMarker = L.marker([location.lat, location.lon], {
           icon: redIcon,
         });
 
@@ -68,14 +74,16 @@ const initStationsOnTheMap = async () => {
         //userPositionMarker._icon.style.color = 'red';
 
         userPositionMarker.bindPopup("User location");
-        markers.addLayer(userPositionMarker);
-
+        //markers.addLayer(userPositionMarker);
+        userPositionMarker.addTo(map);
+        
+/*
         userPositionMarker.on('add', function() {
             // Accédez à l'_leaflet_id après que le marqueur a été ajouté
             //console.log('Leaflet ID:', userPositionMarker._leaflet_id);
             leafletIdOfUserLocationMarker = userPositionMarker._leaflet_id;
         });
-
+*/
         //indexOfUserLocationMarker = userPositionMarker._leaflet_id;
 
       }) // reject
@@ -505,10 +513,19 @@ function main() {
   if (!initMain) {
     initStationsOnTheMap().then(() => {
 
+      let sidebar = initSideBar(map);
+
+
+ // Open the sidebar by default with some content
+ //sidebar.setContent('<h2>My Sidebar Content</h2><p>Hello, this is a sidebar!</p>');
+ //sidebar.show();
+
       console.log("FIN initStationsOnTheMap");
       let listeMarqueurs = markers.getLayers();
 
       console.log(listeMarqueurs);
+
+      
 
 
       //console.log('AAAAAAAAAAAAAAAAAAAAAA',indexOfUserLocationMarker)
@@ -519,13 +536,18 @@ function main() {
 
        //let routingMethod = "Bike";
 
+       let routing = initRouting(map,"bike","fr");
+
+       routing.addTo(map);
 
       if(getUserLocation) {
-        //routingDefault(map,[listeMarqueurs[0].getLatLng(), L.latLng(57.6792, 11.949)]); 
-        routingDefault(map,[markers.getLayer(leafletIdOfUserLocationMarker).getLatLng(), L.latLng(57.6792, 11.949)]); 
+        //createRouting(map,[listeMarqueurs[0].getLatLng(), L.latLng(57.6792, 11.949)]); 
+        //createRouting(map,[markers.getLayer(leafletIdOfUserLocationMarker).getLatLng(), L.latLng(57.6792, 11.949)],"bike","fr"); 
+        
+        //createRouting(map,[userPositionMarker.getLatLng(), L.latLng(57.6792, 11.949)],"bike","fr"); 
+        updateRouting(routing,"bike","fr",[userPositionMarker.getLatLng(), L.latLng(57.6792, 14.949),L.latLng(57.6792, 11.949)]);
       }
-      //routingDefault(map,[L.latLng(57.74, 11.94), L.latLng(57.6792, 11.949)]);
-
+      //createRouting(map,[L.latLng(57.74, 11.94), L.latLng(57.6792, 11.949)]);
 
       /**
        * TEST
@@ -564,6 +586,21 @@ function main() {
     initMain = true;
   } else {
     console.log("Refresh map...");
+
+
+    if(getUserLocation) {
+
+      //console.log('userPositionMarker',userPositionMarker.getLatLng())
+
+      console.log(markers.getLayers());
+      findNearestStation("php/findNearestStation.php",markers.getLayers(),userPositionMarker.getLatLng());
+      
+    } else {
+      console.log(markers.getLayers());
+    }
+
+    
+    
     
         refreshMap()
         .then((o)=> {
@@ -619,3 +656,6 @@ markers.on("clusterclick", function (a) {
 markers.on("click", function (a) {
   console.log("Marker Clicked", a);
 });
+
+
+

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+  </head>
+<body>
+
+
+    
+    <!-- Your map container -->
+    <div id="map" style="height: 400px;"></div>
+    
+    <!-- Your script for initializing the map with Leaflet Routing Machine -->
+    <script>
+      var map = L.map('map').setView([0, 0], 2);
+    
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+    
+      // Add Leaflet Routing Machine control
+      L.Routing.control({
+        routeWhileDragging: true,
+        geocoder: L.Control.Geocoder.nominatim(),
+        waypoints: [
+          L.latLng(0, 0),  // Initial waypoint (you can set it to the starting point)
+          L.latLng(0, 0)   // Final waypoint (you can set it to the destination)
+        ]
+      }).addTo(map);
+    </script>
+    
+    </body>
+    </html>
+    
