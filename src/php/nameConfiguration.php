@@ -7,3 +7,5 @@ define("PASSWORD", "");
 define("PORT", "port=3306;");
 
 define("VELIB_LOGS", "velib_logs");
+
+define('EARTH_RADIUS', 6371);

@@ -213,23 +213,25 @@ export function updateRouting(routing, vehicle, locale, waypoints) {
  * 
  */
 export function findNearestStation(url, stationsMarkers, initialPos) {
-    // Convert the marker cluster group layers to an array of marker data
+
     const markerData = stationsMarkers.map(marker => {
-        // Extract relevant information from each marker, adjust this based on your marker structure
         return {
-            latlng: marker.getLatLng(), // Assuming markers have getLatLng() method
-            // Add any other properties you need from the marker
+            // position
+            latlng: marker.getLatLng(), 
+            // options (stationcode, ebike ...)
+            options:marker['options'],
+            // leaflet id
+            leaflet_id:marker['_leaflet_id']
         };
     });
 
-    // Prepare data for the request
     const requestData = {
         stationsMarkers: markerData,
         initialPos: initialPos
     };
 
-    // Make a POST request using the fetch API
-    fetch(url, {
+
+    let promise = fetch(url, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -237,23 +239,41 @@ export function findNearestStation(url, stationsMarkers, initialPos) {
         body: JSON.stringify(requestData)
     })
     .then(function (response) {
-        // Check if the response status is 200 (OK)
+
         if (response.status === 200) {
-            // Parse the response as JSON
+
             return response.json();
         } else {
-            // Log an error if the response status is not 200
+
             console.error(response);        
         }
     })
     .then((data)=>{
-        // Log the data received from the server
+        // TODO : 
         console.log(data);
+
+        return data;
     })
     .catch((error) => {
-        // Log any errors that occur during the fetch or parsing
+
         console.error('Error:', error);
     });
+
+    return promise;
+    
+}
+
+
+/**
+ * TODO 2 : 
+ * 
+ * 
+ */
+export function findNearestStationWithAPI(stationsMarkers, initialPos) {
+
+
+
+
 }
 
 

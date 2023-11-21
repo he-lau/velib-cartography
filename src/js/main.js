@@ -546,6 +546,7 @@ function main() {
         
         //createRouting(map,[userPositionMarker.getLatLng(), L.latLng(57.6792, 11.949)],"bike","fr"); 
         updateRouting(routing,"bike","fr",[userPositionMarker.getLatLng(), L.latLng(57.6792, 14.949),L.latLng(57.6792, 11.949)]);
+        //updateRouting(routing,"bike","fr",[userPositionMarker.getLatLng(), L.latLng(48.8, 12.3)]);
       }
       //createRouting(map,[L.latLng(57.74, 11.94), L.latLng(57.6792, 11.949)]);
 
@@ -592,8 +593,8 @@ function main() {
 
       //console.log('userPositionMarker',userPositionMarker.getLatLng())
 
-      console.log(markers.getLayers());
-      findNearestStation("php/findNearestStation.php",markers.getLayers(),userPositionMarker.getLatLng());
+      //console.log(markers.getLayers());
+      //findNearestStation("php/findNearestStation.php",markers.getLayers(),userPositionMarker.getLatLng());
       
     } else {
       console.log(markers.getLayers());
@@ -659,3 +660,50 @@ markers.on("click", function (a) {
 
 
 
+// TODO : au clique recuperer l'id du marqueuer le plus proche de l'utilisateur 
+// --> se deplacer sur la station + ouvrir popup
+
+document.addEventListener("DOMContentLoaded", function() {
+
+const nearestStationBtn = document.getElementById("nearest-station-btn");
+
+nearestStationBtn.addEventListener("click", function() {
+
+  
+  console.log("Button clicked!");
+  //console.error("aa");
+
+  console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaa",markers)
+  console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbb",userPositionMarker.getLatLng())
+
+  let a = findNearestStation("php/findNearestStation.php",markers.getLayers(),userPositionMarker.getLatLng())
+  
+  .then((response)=>{
+
+    console.log('AAAAAAAAAAAAAAAA',response);
+
+    // Utilisez la méthode getLayer pour obtenir la couche du marqueur.
+    var marqueurSpecifique = markers.getLayer(response['nearestSationID']);
+    
+    // Vérifiez si le marqueur a été trouvé.
+    if (marqueurSpecifique) {
+        // coordonnées du marqueur.
+        var latLng = marqueurSpecifique.getLatLng();
+    
+        // aller à la station
+        map.flyTo(latLng, 20);
+    
+        // ouvrir popup
+        marqueurSpecifique.openPopup();
+    }   
+
+
+
+  });
+
+
+
+});
+
+
+});
