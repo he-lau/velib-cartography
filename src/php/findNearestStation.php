@@ -90,7 +90,7 @@ if ($method === 'POST') {
     echo json_encode(array(
         'code' => 200,
         "message" => "OK",
-        "stationsMarkers" => $data['stationsMarkers'][0],
+        //"stationsMarkers" => $data['stationsMarkers'][0],
         "initialPos" => $data['initialPos'],
         "nearestSationID" => $nearest_leaflet_id,
         "nearestDistance" => $nearest_distance_between_initial,

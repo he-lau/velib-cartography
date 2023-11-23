@@ -7,7 +7,8 @@ import {
   initRouting,
   updateRouting,
   initSideBar,
-  findNearestStation
+  findNearestStation,
+  isCheckboxChecked
 } from "../../modules/script.js";
 
 const BASE_URL =
@@ -36,6 +37,13 @@ let markers = L.markerClusterGroup();
 
 // variable pour garder en mémoire l'indice des markers
 let indexOfMarkers = [];
+
+
+
+
+
+
+
 
 
 const initStationsOnTheMap = async () => {
@@ -536,9 +544,133 @@ function main() {
 
        //let routingMethod = "Bike";
 
-       let routing = initRouting(map,"bike","fr");
+       let routing = initRouting("bike","fr");
+
 
        routing.addTo(map);
+
+// container de l'interface de routing 
+let leafletRoutingContainer = document.querySelector('.leaflet-routing-container');
+
+//console.log('jjjjjjjjjjjj', leafletRoutingContainers.length);
+if (leafletRoutingContainer) {
+    // Créez un nouvel élément <h1>
+    let nouvelElementH1 = document.createElement('h1');
+
+    // Ajoutez du texte à l'élément h1 si nécessaire
+    nouvelElementH1.textContent = 'Où allons-nous ?';
+
+    // Appliquez des styles CSS à l'élément h1
+    nouvelElementH1.style.marginLeft = '10px'; // Ajoute une marge en bas
+    nouvelElementH1.style.marginTop = '10px'; // Ajoute une marge en bas
+    nouvelElementH1.style.fontSize = '16px'; // Réduit la taille de la police
+    nouvelElementH1.style.textDecorationLine = 'underline';
+
+    // Récupérez le premier enfant de l'élément container
+    let premierEnfant = leafletRoutingContainer.firstChild;
+
+    // Insérez l'élément h1 avant le premier enfant
+    leafletRoutingContainer.insertBefore(nouvelElementH1, premierEnfant);
+} 
+ else {
+        console.log('Aucun élément avec la classe ".leaflet-routing-container" trouvé.');
+    }
+
+
+
+
+      // listener 
+      /**
+       *  TODO : Si un itinéraire valide est choisit :
+       *  - verifier check de "Déposer mon vélo"
+       *    - true : trouver la station avec un dock vide le plus proche de la destination
+       * 
+       * 
+       *  */
+
+
+
+      routing.on('routeselected', function (e) {
+
+      
+        console.log('Route selected:', e.route);
+
+        // "Déposer mon vélo"
+        if (isCheckboxChecked('settings-drop-off-velib')) {
+
+          // Les waypoints qui compose le traet : label + position (lat,lon)
+          let actualWaypoints = e.route.actualWaypoints;
+          console.log('WWWWWWWWWWWWWWWWWw:', actualWaypoints);
+          // On recupere la destination finale
+          let finalDestination = actualWaypoints[actualWaypoints.length-1];
+
+
+          console.log('PPPPPPPPPPPPPPPP',markers.getLayers())
+          console.log('OOOOOOOOOOOOOOOOOOOOO',finalDestination)
+
+          // Requête au serveur pour recuperer l'id du marqueur de la station la plus proche de la destination
+          let findNearestStationQuery = findNearestStation("php/findNearestStation.php",markers.getLayers(),finalDestination.latLng)
+  
+          .then((response)=>{                  
+
+            console.log("findNearestStationQuery",response);
+
+                        // recuperer seulement les coordonnées des waypoints pour MAJ le routing 
+                        var marqueurSpecifique = markers.getLayer(response['nearestSationID']);
+
+                        let actualWaypointsPosOnly = actualWaypoints.map(waypoint => waypoint.latLng);
+                        console.log("TEST1",Object.assign({}, actualWaypointsPosOnly));   
+            
+            // Vérifiez si le marqueur a été trouvé.
+            if (marqueurSpecifique) {                       
+            
+            
+            actualWaypointsPosOnly.splice(actualWaypointsPosOnly.length - 1, 0, marqueurSpecifique.getLatLng());
+
+            console.log("TEST2",actualWaypointsPosOnly);     
+            
+            updateRouting(routing,'bike','fr',actualWaypointsPosOnly);   
+                // ouvrir popup
+                marqueurSpecifique.openPopup();
+
+                
+            } else {
+              alert('Station non trouvé');
+            }   
+          });
+
+      // IMPORTANT : SINON call api en boucle (trigger de routeselected) !!!!!!!!!!!!!!!
+      // + blocké par l'API de nominatim :c (tentative de DDOS)
+
+      // changer l'etat du checkbox
+      let checkbox = document.getElementById("settings-drop-off-velib");
+      checkbox.checked = !checkbox.checked;
+
+
+        } else {
+          console.log("Pas d'options sélectionnées");
+        }
+
+
+
+
+
+
+
+      });
+    
+      // Add an event listener to the control to handle the geocoding results
+      routing.on('geocoderequest', function (e) {
+        console.log('Geocode request:', e);
+      });
+
+      routing.on('routingupdateend', function () {
+        console.log('Routing update completed');
+        // Ajoutez ici tout code supplémentaire à exécuter après la mise à jour du routage
+    });
+
+
+
 
       if(getUserLocation) {
         //createRouting(map,[listeMarqueurs[0].getLatLng(), L.latLng(57.6792, 11.949)]); 
@@ -546,7 +678,7 @@ function main() {
         
         //createRouting(map,[userPositionMarker.getLatLng(), L.latLng(57.6792, 11.949)],"bike","fr"); 
         updateRouting(routing,"bike","fr",[userPositionMarker.getLatLng(), L.latLng(57.6792, 14.949),L.latLng(57.6792, 11.949)]);
-        //updateRouting(routing,"bike","fr",[userPositionMarker.getLatLng(), L.latLng(48.8, 12.3)]);
+        //updateRouting(routing,"bike","fr",[userPositionMarker.getLatLng(), L.latLng(48.875430, 2.392290)]);
       }
       //createRouting(map,[L.latLng(57.74, 11.94), L.latLng(57.6792, 11.949)]);
 
@@ -696,14 +828,24 @@ nearestStationBtn.addEventListener("click", function() {
         // ouvrir popup
         marqueurSpecifique.openPopup();
     }   
-
-
-
   });
-
-
-
 });
 
+// Récupérer l'élément checkbox
+let checkbox = document.getElementById('settings-drop-off-velib');
 
-});
+// Vérifier si la checkbox a été trouvée
+if (checkbox) {
+    // Ajouter l'écouteur d'événements uniquement si la checkbox est trouvée
+    checkbox.addEventListener('change', function () {
+        console.log('changggggggggge');
+    });
+} else {
+    console.error("La checkbox avec l'ID 'settings-drop-off-velib' n'a pas été trouvée.");
+}
+
+
+
+
+
+}); // DOM 

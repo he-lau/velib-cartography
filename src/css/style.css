@@ -10,3 +10,13 @@
     left: 10px;
     z-index: 1000;
 }   
+
+/*
+* TODO : DEBUG : plugin lrm-graphhopper 
+*/
+.leaflet-routing-icon {
+    display: none;
+}
+.leaflet-routing-icon-undefined {
+    display: none;
+}

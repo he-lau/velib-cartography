@@ -135,7 +135,7 @@ export function renderPopUpContent(name,duedate,capacity,numdocksavailable,numbi
 
 // DOCUMENTATION :  https://www.liedman.net/leaflet-routing-machine/api/#l-routing-plan
 // https://www.liedman.net/leaflet-control-geocoder/docs/interfaces/nominatimoptions.html#geocodingqueryparams
-export function initRouting(map,vehicle,locale) {
+export function initRouting(vehicle,locale) {
 
     try {
         
@@ -144,17 +144,21 @@ export function initRouting(map,vehicle,locale) {
             lineOptions: {
                 styles: [{color: '#7f00ff', opacity: 1, weight: 7}]
             },
-            routeWhileDragging: true,            
+            geocoder: L.Control.Geocoder.nominatim({    
+            }),
+            //collapsible: true, // hide/show panel routing
+            reverseWaypoints: false,
+            showAlternatives: false,
+            //routeWhileDragging,            
             router: L.Routing.graphHopper(GRAPH_HOPPER_API_KEY, {
                 urlParameters : {
-                    instructions : true, // liste des instructions (tourner à doite ...)
+                    instructions:true, // liste des instructions (tourner à doite ...)
                     vehicle:vehicle,
                     locale:locale
                 }
             }),
 
-            geocoder: L.Control.Geocoder.nominatim({    
-            }),
+            formatter: null
 
         })
         
@@ -170,8 +174,8 @@ export function initRouting(map,vehicle,locale) {
 */
 
 
-        console.log(routing);
-        console.log(routing.getRouter());
+        //console.log(routing);
+        //console.log(routing.getRouter());
 
 
     return routing;
@@ -277,7 +281,10 @@ export function findNearestStationWithAPI(stationsMarkers, initialPos) {
 }
 
 
-
+export function isCheckboxChecked(elementId) {
+    var checkbox = document.getElementById(elementId);
+    return checkbox.checked;
+  }
 
 
 
