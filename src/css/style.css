@@ -20,3 +20,9 @@
 .leaflet-routing-icon-undefined {
     display: none;
 }
+
+#myChart {
+
+    min-height: 300px;
+
+}

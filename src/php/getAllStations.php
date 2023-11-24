@@ -2,7 +2,7 @@
 
 /**
  * 
- * TODO :
+ * 
  * 1 - Récuperer distinctement l'ensemble des stations (stationcode + name)
  * 2 - Retour au client 
  */
@@ -38,7 +38,6 @@ if ($method === 'GET') {
         ));
     }
 } else {
-    // Autres méthodes non prises en charge
-    http_response_code(405); // 405 Method Not Allowed
-    echo json_encode(array("message" => "Insertion ERROR"));
+    http_response_code(400);
+    echo json_encode(array("message" => "erreeur de la requête"));
 }

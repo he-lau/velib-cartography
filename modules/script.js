@@ -312,4 +312,37 @@ export function getAllStations(url) {
 }
 
 // TODO
-export function getStationInformationsByStationCode(stationcode) {}
+export function getStationInformationsByStationCode(url, stationcode) {
+  const fullUrl = `${url}?stationcode=${encodeURIComponent(stationcode)}`;
+
+  const requestData = {
+    stationcode: stationcode,
+  };
+  let promise = fetch(fullUrl, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    //body: JSON.stringify(requestData),
+  })
+    .then(function (response) {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        console.error(response);
+      }
+    })
+    /*
+        .then((data) => {
+          // TODO :
+          console.log(data);
+    
+          return data;
+        })
+        */
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+
+  return promise;
+}
