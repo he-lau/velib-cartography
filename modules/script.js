@@ -135,7 +135,9 @@ export function renderPopUpContent(name,duedate,capacity,numdocksavailable,numbi
 
 // DOCUMENTATION :  https://www.liedman.net/leaflet-routing-machine/api/#l-routing-plan
 // https://www.liedman.net/leaflet-control-geocoder/docs/interfaces/nominatimoptions.html#geocodingqueryparams
-export function initRouting(vehicle,locale) {
+export function initRouting(vehicle,locale, startIcon, endIcon) {
+
+
 
     try {
         
@@ -143,6 +145,18 @@ export function initRouting(vehicle,locale) {
             //waypoints: waypoints, // default []
             lineOptions: {
                 styles: [{color: '#7f00ff', opacity: 1, weight: 7}]
+            },
+            createMarker: function (i, waypoint, n) {
+                if (i === 0) {
+                    // Starting point
+                    return L.marker(waypoint.latLng, { icon: startIcon });
+                } else if (i === n - 1) {
+                    // Ending point
+                    return L.marker(waypoint.latLng, { icon: endIcon });
+                } else {
+                    // Waypoints in between (default blue marker)
+                    return L.marker(waypoint.latLng);
+                }
             },
             geocoder: L.Control.Geocoder.nominatim({    
             }),
@@ -319,109 +333,6 @@ export function isCheckboxChecked(elementId) {
 
 
 
-
-
-
-export function createRouting(map, waypoints, vehicle, locale) {
-
-    let startIcon = L.icon({
-        iconUrl: 'path/to/start-icon.png',
-        iconSize: [32, 32], // ajustez la taille selon vos besoins
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -32]
-    });
-    
-    let endIcon = L.icon({
-        iconUrl: 'path/to/end-icon.png',
-        iconSize: [32, 32], // ajustez la taille selon vos besoins
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -32]
-    });
-
-    try {
-        
-        let routing = L.Routing.control({
-            waypoints: waypoints,
-            /*
-            waypoints: [
-                L.latLng(0, 0),  // Initial waypoint (you can set it to the starting point)
-                L.latLng(0, 0)   // Final waypoint (you can set it to the destination)
-              ],
-              */
-            lineOptions: {
-                styles: [{color: '#7f00ff', opacity: 1, weight: 7}]
-            },
-            //position: 'bottomleft',
-            //routeWhileDragging: true, 
-
-            createMarker: function (i, waypoint, n) {
-                // Utilisez des marqueurs personnalisés pour le départ et l'arrivée
-                if (i === 0) { // Premier point (départ)
-                    return L.marker(waypoint.latLng, {
-                        icon: startIcon
-                    });
-                } else if (i === n - 1) { // Dernier point (arrivée)
-                    return L.marker(waypoint.latLng, {
-                        icon: endIcon
-                    });
-                } else { // Autres points intermédiaires
-                    return L.marker(waypoint.latLng);
-                }
-            },            
-            //router: L.Routing.mapbox('your-api-key-here'),             
-/*
-            // Nous personnalisons la langue et le moyen de transport
-            router: new L.Routing.osrmv1({
-                serviceUrl: 'https://router.project-osrm.org/route/v1',
-                //serviceUrl: 'http://router.project-osrm.org/route/v1/walking/',
-                language: 'fr',
-                // IMPORTANT : profile non pris en compte en mode demo !!!!!!!!!!
-                profile: 'foot', // car, bike, foot
-            }),
-*/
-            router: L.Routing.graphHopper(GRAPH_HOPPER_API_KEY, {
-                urlParameters : {
-                    instructions : true, // liste des instructions (tourner à doite ...)
-                    vehicle:vehicle,
-                    locale:locale
-            }
-            }),
-
-            //geocoder: L.Control.Geocoder.nominatim()
-
-            geocoder: L.Control.Geocoder.nominatim({
-                collapsed: false,
-                //position: 'bottomleft',
-                text: 'Address Search',
-                placeholder: 'Enter street address',
-               defaultMarkGeocode: false,
-                geocodingQueryParams: {
-
-                    //q: '',
-                    //placeholder: 'Custom Placeholder'
-                }
-            })
-
-        }).addTo(map);
-
-        /*
-        // https://stackoverflow.com/questions/38391132/graphopper-options-in-leaflet
-        routing.getRouter().options.urlParameters.vehicle = 'bike'; 
-        routing.getRouter().options.urlParameters.locale = 'fr'; 
-
-        routing.route();
-*/
-        console.log(routing);
-        console.log(routing.getRouter());
-
-
-    return routing;
-
-    } catch(e) {
-        console.error(e);
-    }
-
-}
 
 
 

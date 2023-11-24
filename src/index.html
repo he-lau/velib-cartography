@@ -1,41 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Placement des stations</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Velib cartography</title>
 
     <!--
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 -->
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
-
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"
+    />
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
 
     <!-- Leaflet.MarkerCluster -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css" rel="stylesheet" />
-    
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css"
+      rel="stylesheet"
+    />
+
     <script src="https://cdn.maptiler.com/maptiler-sdk-js/v1.1.1/maptiler-sdk.umd.js"></script>
-    <link href="https://cdn.maptiler.com/maptiler-sdk-js/v1.1.1/maptiler-sdk.css" rel="stylesheet" />
+    <link
+      href="https://cdn.maptiler.com/maptiler-sdk-js/v1.1.1/maptiler-sdk.css"
+      rel="stylesheet"
+    />
     <script src="https://cdn.maptiler.com/leaflet-maptilersdk/v1.0.0/leaflet-maptilersdk.js"></script>
 
-
-
-
-
     <!-- Font Awesome 6 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <!-- Custom -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css" />
 
     <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
 
     <!-- Routing -->
 
@@ -43,78 +68,154 @@
 
     <script src="../assets/libraries/graphhopper/lrm-graphhopper-1.2.0.min.js"></script>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"
+    />
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
     <!-- Leaflet Sidebar -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-sidebar-v2/css/leaflet-sidebar.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet-sidebar-v2/css/leaflet-sidebar.min.css"
+    />
     <script src="https://unpkg.com/leaflet-sidebar-v2/js/leaflet-sidebar.min.js"></script>
 
     <!-- Locate control -->
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
-
-
-</head>
-<body>
-    
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js"
+      charset="utf-8"
+    ></script>
+  </head>
+  <body>
     <div id="sidebar" class="leaflet-sidebar collapsed">
-        <!-- Nav tabs -->
-        <div class="leaflet-sidebar-tabs">
-            <li><a type="'btn" id="nearest-station-btn"><i class="fa-solid fa-location-crosshairs"></i></a></li>
-            <ul role="tablist"> <!-- top aligned tabs -->
-                <li><a href="#home" role="tab"><i class="fa fa-info"></i></a></li>
-                <li class="disabled"><a href="#profile" role="tab"><i class="fa fa-user"></i></a></li>                
-                <li><a href="#database-chart" role="tab"><i class="fa-solid fa-chart-simple"></i></a></li>
-                <li><a href="#settings" role="tab"><i class="fa-solid fa-gear"></i></a></li>
-            </ul>     
+      <!-- Nav tabs -->
+      <div class="leaflet-sidebar-tabs">
+        <li>
+          <a type="'btn" id="nearest-station-btn"
+            ><i class="fa-solid fa-location-crosshairs"></i
+          ></a>
+        </li>
+        <ul role="tablist">
+          <!-- top aligned tabs -->
+          <li>
+            <a href="#home" role="tab"><i class="fa fa-info"></i></a>
+          </li>
+          <!--
+          <li class="disabled">
+            <a href="#profile" role="tab"><i class="fa fa-user"></i></a>
+          </li>
+          -->
+          <li>
+            <a href="#database-chart" role="tab"
+              ><i class="fa-solid fa-chart-simple"></i
+            ></a>
+          </li>
+          <li>
+            <a href="#settings" role="tab"><i class="fa-solid fa-map"></i></a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Tab panes -->
+      <div class="leaflet-sidebar-content">
+        <div class="leaflet-sidebar-pane" id="home">
+          <h1 class="leaflet-sidebar-header">
+            Velib-cartography
+            <div class="leaflet-sidebar-close">
+              <i class="fa fa-caret-left"></i>
+            </div>
+          </h1>
+          <br />
+          <b>Projet universitaire :</b>
+          <ul>
+            <li>Utilisation d'une API en temps réel</li>
+            <li>Mise à jour des données en temps réel</li>
+            <li>Utilisation d'une base de donnée (MYSQL)</li>
+            <li>Calcul d'itinéraire</li>
+            <li>Détection de la position du client</li>
+            <li>Détection de la station la plus proche</li>
+            <li>Visualisation de données</li>
+          </ul>
+          <b>Utilisation de l'app</b>
+          <ul>
+            <li>
+              <i class="fa-solid fa-location-crosshairs"></i> : Permet de
+              trouver la station la plus proche de l'utilisateur
+            </li>
+            <li>
+              <i class="fa-solid fa-chart-simple"></i> : Permet de visualiser
+              les données concernant les stations stockées en BDD
+            </li>
+            <li>
+              <i class="fa-solid fa-map"></i> : Permet de personnaliser son
+              trajet
+            </li>
+            <li>
+              <img
+                src="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='black' d='M445 4 29 195c-48 23-32 93 19 93h176v176c0 51 70 67 93 19L508 67c16-38-25-79-63-63z'/%3E%3C/svg%3E"
+                alt=""
+                width="12"
+                height="12"
+              />
+              : Permet de se situer sur la carte
+            </li>
+          </ul>
         </div>
-        
-    
-        <!-- Tab panes -->
-        <div class="leaflet-sidebar-content">
-            <div class="leaflet-sidebar-pane" id="home">
-                <h1 class="leaflet-sidebar-header">
-                    Velib-cartography
-                    <div class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></div>
-                </h1>
-                <br>
-                <b>Projet universitaire :</b>
-                <ul>
-                    <li>Utilisation d'une API en temps réel</li>
-                    <li>Mise à jour des données en temps réel</li>
-                    <li>Utilisation d'une base de donnée (MYSQL)</li>
-                    <li>Calcul d'itinéraire</li>
-                </ul>
-            </div>
-    
-            <div class="leaflet-sidebar-pane" id="profile">
-                <h1 class="leaflet-sidebar-header">Profile<div class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></div></h1>
-            </div>
 
-            <div class="leaflet-sidebar-pane" id="settings">
-                <ul>
-                    <li>
-                        <input id="settings-drop-off-velib" type="checkbox" > Déposer mon vélo
-                    </li>
-                </ul>
-
+        <div class="leaflet-sidebar-pane" id="profile">
+          <h1 class="leaflet-sidebar-header">
+            Profile
+            <div class="leaflet-sidebar-close">
+              <i class="fa fa-caret-left"></i>
             </div>
-            <div class="leaflet-sidebar-pane" id="nearest-station">
-
-            </div>
-   
-            <div  class="leaflet-sidebar-pane" id="database-chart"></div>
+          </h1>
         </div>
+
+        <div class="leaflet-sidebar-pane" id="settings">
+          <h1 class="leaflet-sidebar-header">
+            Planifiez votre trajet
+            <div class="leaflet-sidebar-close">
+              <i class="fa fa-caret-left"></i>
+            </div>
+          </h1>
+          <br />
+          <b>Options : </b>
+          <ul>
+            <li>
+              <input id="settings-drop-off-velib" type="checkbox" /> Déposer mon
+              vélo avant l'arrivée
+            </li>
+          </ul>
+        </div>
+        <div class="leaflet-sidebar-pane" id="nearest-station"></div>
+
+        <div class="leaflet-sidebar-pane" id="database-chart">
+          <h1 class="leaflet-sidebar-header">
+            Visualisation de données
+            <div class="leaflet-sidebar-close">
+              <i class="fa fa-caret-left"></i>
+            </div>
+          </h1>
+          <br />
+          <b>Choisissez la station :</b>
+          <select
+            name="selected-station-for-dataviz"
+            id="selected-station-for-dataviz"
+          ></select>
+        </div>
+      </div>
     </div>
-    
+
     <div id="map"></div>
 
     <script type="module" src="./js/main.js"></script>
 
     <div id="alert" class="alert alert-success m-3 d-none" role="alert"></div>
-    
-
-</body>
+  </body>
 </html>

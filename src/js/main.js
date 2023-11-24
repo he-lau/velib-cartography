@@ -3,7 +3,6 @@ import {
   getUserCoordonnees,
   renderPopUpContent,
   insertVelibLogs,
-  createRouting,
   initRouting,
   updateRouting,
   initSideBar,
@@ -14,16 +13,38 @@ import {
 const BASE_URL =
   "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/velib-disponibilite-en-temps-reel";
 
-const redIcon = new L.Icon({
-  iconUrl:
-    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
-  shadowUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
+const userPosIcon = new L.divIcon({
+  className: 'custom-marker',
+  html: '<div style="background-color: red; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-user" style="color: white;"></i></div>',
+  //iconUrl:"https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
+  //shadowUrl:"https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+  iconSize: [50, 50],
+  iconAnchor: [20, 0],
+  //popupAnchor: [1, -34],
+  //shadowSize: [41, 41],
 });
+
+const bikeIcon = L.divIcon({
+  className: 'custom-marker',
+  html: '<div style="background-color: blue; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-bicycle" style="color: white;"></i></div>',
+  iconSize: [50, 50], // Taille
+  iconAnchor: [20, 0], // Point d'ancrage de l'icône par rapport à la position du marqueur
+});
+
+const startIcon = L.divIcon({
+  className: 'custom-marker',
+  html: '<div style="background-color: green; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-flag-checkered" style="color: white;"></i></div>',
+  iconSize: [50, 50],
+  iconAnchor: [20, 0],
+});
+
+const endIcon = L.divIcon({
+  className: 'custom-marker',
+  html: '<div style="background-color: red; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-map-marker-alt" style="color: white;"></i></div>',
+  iconSize: [50, 50],
+  iconAnchor: [20, 0],
+});
+
 
 let map;
 
@@ -32,6 +53,7 @@ let getUserLocation = false;
 let leafletIdOfUserLocationMarker = -1;
 
 let userPositionMarker;
+let userLocation = {};
 
 let markers = L.markerClusterGroup();
 
@@ -42,18 +64,16 @@ let indexOfMarkers = [];
 
 
 
-
-
-
-
 const initStationsOnTheMap = async () => {
-  let userLocation = {};
+
 
   try {
     // Appel de la fonction getUserCoordonnees de manière asynchrone
     await getUserCoordonnees()
       .then((location) => {
         //console.log('test', location.lon);
+
+        userLocation = location;
 
         if (!mapInitialized) {
           // init leaflet map
@@ -75,7 +95,7 @@ const initStationsOnTheMap = async () => {
                 */
         // Créez un marqueur par défaut de Leaflet
         userPositionMarker = L.marker([location.lat, location.lon], {
-          icon: redIcon,
+          icon: userPosIcon,
         });
 
 
@@ -160,8 +180,9 @@ let marker = L.marker([lon, lat])
               mechanical
             );
 
-            // TODO : sauvegarder les meta datas
+            // sauvegarder les meta datas
             let marker = L.marker([lat, lon], {
+              icon:bikeIcon,
               stationcode: stationcode,
               name: name,
               duedate: duedate,
@@ -544,7 +565,7 @@ function main() {
 
        //let routingMethod = "Bike";
 
-       let routing = initRouting("bike","fr");
+       let routing = initRouting("bike","fr",startIcon,endIcon);
 
 
        routing.addTo(map);
@@ -666,21 +687,15 @@ if (leafletRoutingContainer) {
 
       routing.on('routingupdateend', function () {
         console.log('Routing update completed');
-        // Ajoutez ici tout code supplémentaire à exécuter après la mise à jour du routage
     });
 
 
 
 
-      if(getUserLocation) {
-        //createRouting(map,[listeMarqueurs[0].getLatLng(), L.latLng(57.6792, 11.949)]); 
-        //createRouting(map,[markers.getLayer(leafletIdOfUserLocationMarker).getLatLng(), L.latLng(57.6792, 11.949)],"bike","fr"); 
-        
-        //createRouting(map,[userPositionMarker.getLatLng(), L.latLng(57.6792, 11.949)],"bike","fr"); 
-        updateRouting(routing,"bike","fr",[userPositionMarker.getLatLng(), L.latLng(57.6792, 14.949),L.latLng(57.6792, 11.949)]);
+      if(getUserLocation) {        
+        //updateRouting(routing,"bike","fr",[userPositionMarker.getLatLng(), L.latLng(57.6792, 14.949),L.latLng(57.6792, 11.949)]);
         //updateRouting(routing,"bike","fr",[userPositionMarker.getLatLng(), L.latLng(48.875430, 2.392290)]);
       }
-      //createRouting(map,[L.latLng(57.74, 11.94), L.latLng(57.6792, 11.949)]);
 
       /**
        * TEST
@@ -738,6 +753,11 @@ if (leafletRoutingContainer) {
         refreshMap()
         .then((o)=> {
 
+          /**
+           * Alert pour la maj des stations
+           * 
+           */
+
             //alert(o.updatedCount + " station(s) mis à jour.");
             var alertElement = document.getElementById('alert');
 
@@ -771,6 +791,13 @@ if (leafletRoutingContainer) {
                 alertElement.classList.add('d-none');
             }, 4000);
             
+        })
+        .then(()=>{
+
+            /**
+             * TODO : MAJ position de l'utilisateur
+             */
+            console.log("Update user position...");
         });
         
   }
@@ -847,5 +874,11 @@ if (checkbox) {
 
 
 
+
+/**
+ * 
+ * TODO : dataviz
+ * 
+ */
 
 }); // DOM 
