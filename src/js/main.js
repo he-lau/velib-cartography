@@ -808,7 +808,7 @@ nearestStationBtn.addEventListener("click", function() {
   console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaa",markers)
   console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbb",userPositionMarker.getLatLng())
 
-  let a = findNearestStation("php/findNearestStation.php",markers.getLayers(),userPositionMarker.getLatLng())
+  let a = findNearestStation("php/findNearestStation.php",markers.getLayers(),userPositionMarker.getLatLng(),false)
   
   .then((response)=>{
 

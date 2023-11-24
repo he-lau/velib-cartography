@@ -216,7 +216,7 @@ export function updateRouting(routing, vehicle, locale, waypoints) {
  *  TODO :
  * 
  */
-export function findNearestStation(url, stationsMarkers, initialPos) {
+export function findNearestStation(url, stationsMarkers, initialPos, dockAvailable=true) {
 
     const markerData = stationsMarkers.map(marker => {
         return {
@@ -231,7 +231,9 @@ export function findNearestStation(url, stationsMarkers, initialPos) {
 
     const requestData = {
         stationsMarkers: markerData,
-        initialPos: initialPos
+        initialPos: initialPos,
+        // param pour savoir si la station doit contenir un dock avec au minima 1 place libre
+        dockAvailable:dockAvailable
     };
 
 
@@ -261,6 +263,8 @@ export function findNearestStation(url, stationsMarkers, initialPos) {
     .catch((error) => {
 
         console.error('Error:', error);
+        console.error('Error:', error.message); // Affiche le message d'erreur spécifique
+
     });
 
     return promise;

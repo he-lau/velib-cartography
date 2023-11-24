@@ -12,6 +12,8 @@
  *          - PROBLEME : call API important !!
  * 
  *  3 - reponse au client 
+ * 
+ *  24/11/23 : gerer l'option numdocksavailable : si true, ne traiter que les stations avec  
  */
 
 require_once "init.php";
@@ -63,10 +65,35 @@ if ($method === 'POST') {
     $initial_pos_lat = $data['initialPos']['lat'];
     $initial_pos_lng = $data['initialPos']['lng'];
 
+    /**
+     * TODO : dockAvailable à true, retirer les stations avec 0 dock libre 
+     */
+
+
+    if (isset($data['dockAvailable']) && !empty($data['dockAvailable'])) {
+        if ($data['dockAvailable']) {
+
+            // Parcourir les stations
+            foreach ($data['stationsMarkers'] as $index => $station) {
+
+                // condition
+                if (!($station['options']['numdocksavailable'] > 0)) {
+                    // Retirer l'élément 
+                    unset($data['stationsMarkers'][$index]);
+                }
+            }
+
+            // Réindexer 
+            $data['stationsMarkers'] = array_values($data['stationsMarkers']);
+        }
+    }
+
+
 
     // A determiner
     $nearest_leaflet_id = $data['stationsMarkers'][0]['leaflet_id'];
     $nearest_distance_between_initial = haversine($initial_pos_lat, $initial_pos_lng, $data['stationsMarkers'][0]['latlng']['lat'], $data['stationsMarkers'][0]['latlng']['lng']);
+
 
     // Parcourrir l'ensemble des stations
     $count = count($data['stationsMarkers']);
@@ -86,13 +113,17 @@ if ($method === 'POST') {
 
 
 
+
     http_response_code(200); // ok
+
     echo json_encode(array(
         'code' => 200,
         "message" => "OK",
-        //"stationsMarkers" => $data['stationsMarkers'][0],
+        "stationsMarkers TEST" => $data['stationsMarkers'],
+        //"dockAvailable TEST" => $data['stationsMarkers'][0]['options']['numdocksavailable'],
         "initialPos" => $data['initialPos'],
         "nearestSationID" => $nearest_leaflet_id,
         "nearestDistance" => $nearest_distance_between_initial,
+
     ));
 }
