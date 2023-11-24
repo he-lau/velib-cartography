@@ -91,6 +91,9 @@
       src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js"
       charset="utf-8"
     ></script>
+
+    <!-- ChartJS-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
     <div id="sidebar" class="leaflet-sidebar collapsed">
@@ -208,6 +211,11 @@
             name="selected-station-for-dataviz"
             id="selected-station-for-dataviz"
           ></select>
+          <br /><br />
+          <b>Visualisation</b>
+          <div>
+            <canvas id="myChart"></canvas>
+          </div>
         </div>
       </div>
     </div>

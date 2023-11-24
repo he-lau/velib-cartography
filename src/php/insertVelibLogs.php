@@ -52,7 +52,6 @@ if ($method === 'POST') {
         echo json_encode(array("message" => "Insertion failed"));
     }
 } else {
-    // Autres méthodes non prises en charge
     http_response_code(405); // 405 Method Not Allowed
     echo json_encode(array("message" => "Insertion ERROR"));
 }
