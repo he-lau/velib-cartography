@@ -13,9 +13,11 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === 'GET') {
 
-    $table = VELIB_LOGS;
+    //$table = VELIB_LOGS;
 
-    $sql = "SELECT DISTINCT stationcode, name FROM $table WHERE name IS NOT NULL";
+    //$sql = "SELECT DISTINCT stationcode, name FROM $table WHERE name IS NOT NULL";
+
+    $sql = "SELECT * FROM " . STATION_TABLE;
 
     $stmt = $db->prepare($sql);
 

@@ -162,7 +162,7 @@ export function initRouting(vehicle, locale, startIcon, endIcon) {
         }
       },
       geocoder: L.Control.Geocoder.nominatim({}),
-      //collapsible: true, // hide/show panel routing
+      collapsible: true, // hide/show panel routing
       reverseWaypoints: false,
       showAlternatives: false,
       //routeWhileDragging,
@@ -210,7 +210,7 @@ export function updateRouting(routing, vehicle, locale, waypoints) {
 
   routing.getRouter().options.urlParameters.vehicle = vehicle;
 
-  // Trigger route calculation with updated waypoints
+  // Trigger route calculation
   routing.route();
 }
 

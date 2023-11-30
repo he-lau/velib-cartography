@@ -15,10 +15,17 @@ if ($method === 'GET') {
 
     $stationcode = htmlspecialchars($_GET['stationcode']);
 
-    $table = VELIB_LOGS;
+    //$table = VELIB_LOGS;
+    $table = LOGS_TABLE;
 
-    // 
     $sql = "SELECT * FROM $table WHERE stationcode=:stationcode";
+
+    /*
+    $sql = "SELECT * 
+    FROM " . LOGS_TABLE . " AS logs
+    LEFT " . STATION_TABLE . " AS station ON logs.stationcode = station.stationcode
+    WHERE logs.stationcode = :stationcode";
+*/
 
     $stmt = $db->prepare($sql);
 

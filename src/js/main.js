@@ -260,7 +260,7 @@ const refreshMap = async () => {
 
       //console.log("station courante",stationcode);
       //console.log("indice du courant",indexOfMarkerOfcurrentElement);
-
+      /*  
       const newOptions = {
         stationcode: stationcode,
         name: name,
@@ -271,7 +271,7 @@ const refreshMap = async () => {
         ebike: ebike,
         mechanical: mechanical,
       };
-
+      */
       let avant = Object.assign({}, markerOfcurrentElement["options"]);
 
       // comparer les metadatas (options) & ssi different : maj vue
@@ -561,13 +561,13 @@ function main() {
       let leafletRoutingContainer = document.querySelector(
         ".leaflet-routing-container"
       );
-
+      /*
       //console.log('jjjjjjjjjjjj', leafletRoutingContainers.length);
       if (leafletRoutingContainer) {
         // Créez un nouvel élément <h1>
         let nouvelElementH1 = document.createElement("h1");
 
-        // Ajoutez du texte à l'élément h1 si nécessaire
+        //
         nouvelElementH1.textContent = "Où allons-nous ?";
 
         // Appliquez des styles CSS à l'élément h1
@@ -579,14 +579,14 @@ function main() {
         // Récupérez le premier enfant de l'élément container
         let premierEnfant = leafletRoutingContainer.firstChild;
 
-        // Insérez l'élément h1 avant le premier enfant
+        // avant le premier enfant
         leafletRoutingContainer.insertBefore(nouvelElementH1, premierEnfant);
       } else {
         console.log(
           'Aucun élément avec la classe ".leaflet-routing-container" trouvé.'
         );
       }
-
+*/
       // listener
       /**
        *  TODO : Si un itinéraire valide est choisit :
