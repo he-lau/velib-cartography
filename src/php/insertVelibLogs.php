@@ -75,9 +75,9 @@ if ($method === 'POST') {
 
         $stmt->bindParam(':duedate', $data['duedate'], PDO::PARAM_STR);
         $stmt->bindParam(':ebike', $data['ebike'], PDO::PARAM_INT);
-        $stmt->bindParam(':is_installed', $data['is_installed'], PDO::PARAM_INT);
-        $stmt->bindParam(':is_renting', $data['is_renting'], PDO::PARAM_INT);
-        $stmt->bindParam(':is_returning', $data['is_returning'], PDO::PARAM_INT);
+        $stmt->bindParam(':is_installed', $data['is_installed']);
+        $stmt->bindParam(':is_renting', $data['is_renting']);
+        $stmt->bindParam(':is_returning', $data['is_returning']);
         $stmt->bindParam(':mechanical', $data['mechanical'], PDO::PARAM_INT);
 
         $stmt->bindParam(':numbikesavailable', $data['numbikesavailable'], PDO::PARAM_INT);

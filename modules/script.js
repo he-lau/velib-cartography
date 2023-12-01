@@ -1,7 +1,5 @@
 import { GRAPH_HOPPER_API_KEY } from "../config.js";
 
-// https://restfulapi.net/http-status-codes/
-
 // requête au serveur pour mettre en log les informations d'une station
 export function insertVelibLogs(url, station) {
   fetch(url, {
@@ -253,7 +251,6 @@ export function findNearestStation(
       }
     })
     .then((data) => {
-      // TODO :
       console.log(data);
 
       return data;
@@ -266,11 +263,6 @@ export function findNearestStation(
   return promise;
 }
 
-/**
- * TODO 2 :
- *
- *
- */
 export function findNearestStationWithAPI(stationsMarkers, initialPos) {}
 
 export function isCheckboxChecked(elementId) {
@@ -296,14 +288,6 @@ export function getAllStations(url) {
         console.error(response);
       }
     })
-    /*
-    .then((data) => {
-      // TODO :
-      console.log(data);
-
-      return data;
-    })
-    */
     .catch((error) => {
       console.error("Error:", error);
     });
@@ -311,7 +295,6 @@ export function getAllStations(url) {
   return promise;
 }
 
-// TODO
 export function getStationInformationsByStationCode(url, stationcode) {
   const fullUrl = `${url}?stationcode=${encodeURIComponent(stationcode)}`;
 
@@ -332,14 +315,6 @@ export function getStationInformationsByStationCode(url, stationcode) {
         console.error(response);
       }
     })
-    /*
-        .then((data) => {
-          // TODO :
-          console.log(data);
-    
-          return data;
-        })
-        */
     .catch((error) => {
       console.error("Error:", error);
     });
