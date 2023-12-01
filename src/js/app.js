@@ -144,6 +144,7 @@ const initStationsOnTheMap = async () => {
 };
 
 const updateMarkerProperties = (marker, element) => {
+  // MAJ popup
   marker.setPopupContent(
     renderPopUpContent(
       element.name,
@@ -156,12 +157,22 @@ const updateMarkerProperties = (marker, element) => {
     )
   );
 
+  // MAJ metadata du marqueuer
   marker.options.duedate = element.duedate;
+
   marker.options.numbikesavailable = element.numbikesavailable;
   marker.options.numdocksavailable = element.numdocksavailable;
+
   marker.options.ebike = element.ebike;
   marker.options.mechanical = element.mechanical;
 
+  marker.options.capacity = element.capacity;
+
+  marker.options.is_installed = element.is_installed;
+  marker.options.is_renting = element.is_renting;
+  marker.options.is_returning = element.is_returning;
+
+  // log
   insertVelibLogs("php/insertVelibLogs.php", element);
 };
 
@@ -256,11 +267,6 @@ const refreshMap = async () => {
         console.log("avant : ", avant, "après : ", element);
         updateMarkerProperties(markerToChange, element);
         updatedCount++;
-      } else if (name !== markerOfcurrentElement["options"]["name"]) {
-        console.log("name changed !" + " - " + name);
-        console.log("avant : ", avant, "après : ", element);
-        updateMarkerProperties(markerToChange, element);
-        updatedCount++;
       } else if (
         numbikesavailable !==
         markerOfcurrentElement["options"]["numbikesavailable"]
@@ -295,14 +301,6 @@ const refreshMap = async () => {
         is_returning !== markerOfcurrentElement["options"]["is_returning"]
       ) {
         console.log("is_returning changed !" + " - " + name);
-        console.log("avant : ", avant, "après : ", element);
-        updateMarkerProperties(markerToChange, element);
-        updatedCount++;
-      } else if (
-        nom_arrondissement_communes !==
-        markerOfcurrentElement["options"]["nom_arrondissement_communes"]
-      ) {
-        console.log("nom_arrondissement_communes changed !" + " - " + name);
         console.log("avant : ", avant, "après : ", element);
         updateMarkerProperties(markerToChange, element);
         updatedCount++;
