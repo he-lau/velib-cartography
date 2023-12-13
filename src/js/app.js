@@ -475,9 +475,12 @@ function main() {
           console.log("User current position", position);
           if (!userPositionMarker) {
             // Créer le marqueur s'il n'existe pas
-            userPositionMarker = L.marker([position.lat, position.lon]).addTo(
-              map
-            );
+            userPositionMarker = L.marker([position.lat, position.lon], {
+              icon: userPosIcon,
+            });
+            userPositionMarker.bindPopup("User location");
+            //markers.addLayer(userPositionMarker);
+            userPositionMarker.addTo(map);
           } else {
             // MAJ position si le marqueur existe déjà
             userPositionMarker.setLatLng([position.lat, position.lon]);
