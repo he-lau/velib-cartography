@@ -198,11 +198,12 @@ const refreshMap = async () => {
 
   data.forEach((element) => {
     let coordonnees_geo = element["coordonnees_geo"];
-    let lon = coordonnees_geo["lon"];
-    let lat = coordonnees_geo["lat"];
 
     // (il arrive que l'api retourne des valeurs null), embêtant si position null pour l'insertion si la station non init
-    if (lon !== null && lat !== null) {
+    if (coordonnees_geo["lon"] !== null && coordonnees_geo["lat"] !== null) {
+      let lon = coordonnees_geo["lon"];
+      let lat = coordonnees_geo["lat"];
+
       // Logs
       //insertVelibLogs("php/insertVelibLogs.php",element);
 
@@ -354,12 +355,12 @@ function main() {
         if (isCheckboxChecked("settings-drop-off-velib")) {
           // Les waypoints qui compose le traet : label + position (lat,lon)
           let actualWaypoints = e.route.actualWaypoints;
-          console.log("WWWWWWWWWWWWWWWWWw:", actualWaypoints);
+          //console.log("WWWWWWWWWWWWWWWWWw:", actualWaypoints);
           // On recupere la destination finale
           let finalDestination = actualWaypoints[actualWaypoints.length - 1];
 
-          console.log("PPPPPPPPPPPPPPPP", markers.getLayers());
-          console.log("OOOOOOOOOOOOOOOOOOOOO", finalDestination);
+          //console.log("PPPPPPPPPPPPPPPP", markers.getLayers());
+          //console.log("OOOOOOOOOOOOOOOOOOOOO", finalDestination);
 
           // Requête au serveur pour recuperer l'id du marqueur de la station la plus proche de la destination
           let findNearestStationQuery = findNearestStation(

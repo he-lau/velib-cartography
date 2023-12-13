@@ -1,7 +1,7 @@
 #map { 
-    min-height: 580px; 
     background-color: lightgrey;
-    height: 100%;
+    height: calc(100vh - 100px); 
+
 }
 
 #geocoder {
