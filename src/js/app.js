@@ -467,12 +467,22 @@ function main() {
       })
       .then(() => {
         /**
-         * TODO : MAJ position de l'utilisateur
+         * MAJ position de l'utilisateur
          */
         console.log("Update user position...");
 
         getUserCoordonnees().then((position) => {
           console.log("User current position", position);
+          if (!userPositionMarker) {
+            // Créer le marqueur s'il n'existe pas
+            userPositionMarker = L.marker([position.lat, position.lon]).addTo(
+              map
+            );
+          } else {
+            // MAJ position si le marqueur existe déjà
+            userPositionMarker.setLatLng([position.lat, position.lon]);
+            userPositionMarker.update();
+          }
         });
       });
   }
