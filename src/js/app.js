@@ -200,7 +200,11 @@ const refreshMap = async () => {
     let coordonnees_geo = element["coordonnees_geo"];
 
     // (il arrive que l'api retourne des valeurs null), embêtant si position null pour l'insertion si la station non init
-    if (coordonnees_geo["lon"] !== null && coordonnees_geo["lat"] !== null) {
+    if (
+      coordonnees_geo !== null &&
+      coordonnees_geo["lon"] !== null &&
+      coordonnees_geo["lat"] !== null
+    ) {
       let lon = coordonnees_geo["lon"];
       let lat = coordonnees_geo["lat"];
 

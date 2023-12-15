@@ -2,18 +2,11 @@
 
 /**
  * 
- * TODO : 
  *  1 - parcourrir l'ensemble des marqueuers et recuperer leurs positions
- *  2 - choisir une solution métier :
- *      - vol d'oiseau ?
- *      - Djisktra, A* ... :
- *          - PROBLEME : acces au cout (routes)
- *      - Utiliser une API de routing pour avoir l'estimation de temps/ distance
- *          - PROBLEME : call API important !!
- * 
+ *  2 - choisir une solution métier : harversine
  *  3 - reponse au client 
  * 
- *  24/11/23 : gerer l'option numdocksavailable : si true, ne traiter que les stations avec  
+ *  --> gerer l'option numdocksavailable : si true, ne traiter que les stations avec  
  */
 
 require_once "init.php";
@@ -21,7 +14,7 @@ require_once "init.php";
 
 
 
-// TODO : Formule de haversine
+// Formule de haversine
 
 function haversine($lat1, $lon1, $lat2, $lon2)
 {
@@ -66,7 +59,7 @@ if ($method === 'POST') {
     $initial_pos_lng = $data['initialPos']['lng'];
 
     /**
-     * TODO : dockAvailable à true, retirer les stations avec 0 dock libre 
+     * dockAvailable à true, retirer les stations avec 0 dock libre 
      */
 
 
@@ -92,7 +85,12 @@ if ($method === 'POST') {
 
     // A determiner
     $nearest_leaflet_id = $data['stationsMarkers'][0]['leaflet_id'];
-    $nearest_distance_between_initial = haversine($initial_pos_lat, $initial_pos_lng, $data['stationsMarkers'][0]['latlng']['lat'], $data['stationsMarkers'][0]['latlng']['lng']);
+    $nearest_distance_between_initial = haversine(
+        $initial_pos_lat,
+        $initial_pos_lng,
+        $data['stationsMarkers'][0]['latlng']['lat'],
+        $data['stationsMarkers'][0]['latlng']['lng']
+    );
 
 
     // Parcourrir l'ensemble des stations
@@ -102,7 +100,12 @@ if ($method === 'POST') {
         $station = $data['stationsMarkers'][$i];
         // si la distance est plus courte 
 
-        $current_distance_between_initial = haversine($initial_pos_lat, $initial_pos_lng, $station['latlng']['lat'], $station['latlng']['lng']);
+        $current_distance_between_initial = haversine(
+            $initial_pos_lat,
+            $initial_pos_lng,
+            $station['latlng']['lat'],
+            $station['latlng']['lng']
+        );
 
 
         if ($current_distance_between_initial < $nearest_distance_between_initial) {
@@ -119,9 +122,9 @@ if ($method === 'POST') {
     echo json_encode(array(
         'code' => 200,
         "message" => "OK",
-        "stationsMarkers TEST" => $data['stationsMarkers'],
+        //"stationsMarkers TEST" => $data['stationsMarkers'],
         //"dockAvailable TEST" => $data['stationsMarkers'][0]['options']['numdocksavailable'],
-        "initialPos" => $data['initialPos'],
+        //"initialPos" => $data['initialPos'],
         "nearestSationID" => $nearest_leaflet_id,
         "nearestDistance" => $nearest_distance_between_initial,
 
